@@ -1,24 +1,32 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import './App.scss';
+import ReactPlayer from "react-player";
+import Chat from "./components/Chat/Chat";
 
 function App() {
+
+    function _onReady(event: any) {
+        event.target.pauseVideo();
+
+    }
+
+    function handleProgress(state: any) {
+        console.log('onProgress', state)
+    }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className={"app"}>
+        <Chat />
+        <div className="player-wrapper">
+            {/*<ReactPlayer
+                className='react-player'
+                width='100%'
+                height='100%'
+                url='https://www.youtube.com/watch?v=G4dkLMj6GRQ'
+                onProgress={handleProgress}
+                onReady={() => console.log('onReady')}
+            />*/}
+        </div>
     </div>
   );
 }

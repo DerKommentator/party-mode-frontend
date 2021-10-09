@@ -1,0 +1,15 @@
+.chat-wrapper {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  width: max-content;
+}
+
+.chat__history {
+  overflow: auto;
+  flex-grow: 1;
+}
+
+.chat__input {
+  bottom: 0;
+}
