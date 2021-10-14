@@ -1,17 +1,18 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import "./Message.scss";
 
-interface props {
-    messageEvent: MessageEvent;
+interface IMessage {
+    client_id: string
+    client_username: string,
+    message: string
 }
 
-const Message = ({messageEvent}: props) => {
-    const [message, setMessage] = useState(JSON.parse(messageEvent.data));
+const Message = (data: IMessage) => {
+    const [messageObject, setMessageObject] = useState<IMessage>(data);
 
-    
     return (
         <div className={"message"}>
-            {message.client_username}: {message.body}
+            <p><b>{messageObject.client_username}</b>: {messageObject.message}</p>
         </div>
     )
 }

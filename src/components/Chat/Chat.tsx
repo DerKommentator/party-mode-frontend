@@ -6,39 +6,51 @@ import ChatHistory from "./ChatHistory/ChatHistory";
 import ChatOptions from "./ChatOptions/ChatOptions";
 import {SocketContext} from "../../socket_context/context";
 
+interface Response {
+    data: any
+}
 
 const Chat = () => {
     const socket = useContext(SocketContext);
-    const [chatHistory, setChatHistory] = useState<MessageEvent[]>([]);
-    const [username, setUsername] = useState("");
+    const [chatHistory, setChatHistory] = useState<Response[]>([]);
+    const [userRegistered, setUserRegistered] = useState(false);
     const invalidInput = new RegExp("^\\s*$");
     
     const connect = useCallback(() => {
         console.log("connecting");
 
-        socket.onopen = () => {
+        socket.ws.onopen = () => {
             console.log("Successfully Connected");
-            socket.send(username);
         }
 
-        socket.onmessage = msg => {
-            console.log("Message Received:", msg);
+        socket.on("registered", (data: any) => {
+            console.log("User registered:", data.data);
+            setUserRegistered(true);
+        })
+
+        socket.on("response", (data: any) => {
+            console.log("response:", data)
+            setChatHistory(lastMessage => [...lastMessage, data]);
+        })
+
+        /*socket.ws.onmessage = msg => {
+            //console.log("Message Received:", msg);
             setChatHistory(lastMessage => [...lastMessage, msg]);
-        }
+        }*/
 
-        socket.onclose = event => {
+        socket.ws.onclose = event => {
             console.log("Socket Closed Connection: ", event);
         };
 
-        socket.onerror = error => {
+        socket.ws.onerror = error => {
             console.log("Socket Error: ", error);
         };
-    }, [socket, username])
+    }, [socket])
 
 
     useEffect(() => {
         connect();
-    })
+    }, [])
 
     const onFormSubmit = (event: React.SyntheticEvent) => {
         event.preventDefault();
@@ -47,18 +59,34 @@ const Chat = () => {
         };
 
         if (target.username.value !== undefined && !invalidInput.test(target.username.value)) {
-            console.log(target.username.value)
-            setUsername(target.username.value);
+            console.log("Register User:", target.username.value);
+            socket.emit("register", target.username.value);
+
             target.username.value = "";
         }
     }
 
+    /*return (
+        <div className={"chat-wrapper"}>
+            <SocketProvider>
+                <div className={"chat__history"}>
+                    <ChatHistory chatHistory={chatHistory}/>
+                </div>
+                <div className={"chat__input"}>
+                    <ChatInput />
+                </div>
+                <div>
+                    <ChatOptions />
+                </div>
+            </SocketProvider>
+        </div>
+    )*/
     
     return (
         <div className={"chat-wrapper"}>
             {
-                username !== "" ? (
-                        <SocketProvider>
+                userRegistered ? (
+                    <SocketProvider>
                             <div className={"chat__history"}>
                                 <ChatHistory chatHistory={chatHistory}/>
                             </div>
@@ -68,7 +96,7 @@ const Chat = () => {
                             <div>
                                 <ChatOptions />
                             </div>
-                        </SocketProvider>
+                    </SocketProvider>
                 ) : (
                     <form onSubmit={onFormSubmit}>
                         <input name="username" />

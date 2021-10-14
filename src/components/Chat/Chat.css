@@ -2,7 +2,8 @@
   display: flex;
   flex-direction: column;
   height: 100vh;
-  width: max-content;
+  width: 340px;
+  max-width: 340px;
 }
 
 .chat__history {
@@ -12,6 +13,8 @@
 
 .chat__input {
   bottom: 0;
+  width: 100%;
+  flex-grow: 1;
 }
 
 /*# sourceMappingURL=Chat.css.map */
