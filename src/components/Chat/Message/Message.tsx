@@ -7,12 +7,16 @@ interface IMessage {
     message: string
 }
 
-const Message = (data: IMessage) => {
-    const [messageObject, setMessageObject] = useState<IMessage>(data);
+const Message = (props: {messageObject: IMessage}) => {
+    //const [messageObject, setMessageObject] = useState<IMessage>(data);
+
+    /*useEffect(() => {
+        console.log("<Message>", messageObject);
+    }, [messageObject])*/
 
     return (
         <div className={"message"}>
-            <p><b>{messageObject.client_username}</b>: {messageObject.message}</p>
+            <p><b>{props.messageObject.client_username}</b>: {props.messageObject.message}</p>
         </div>
     )
 }

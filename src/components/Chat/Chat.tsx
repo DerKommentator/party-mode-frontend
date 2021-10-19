@@ -11,6 +11,7 @@ interface Response {
 }
 
 const Chat = () => {
+    const MAX_CHAT_LENGTH = 100;
     const socket = useContext(SocketContext);
     const [chatHistory, setChatHistory] = useState<Response[]>([]);
     const [userRegistered, setUserRegistered] = useState(false);
@@ -29,8 +30,8 @@ const Chat = () => {
         })
 
         socket.on("response", (data: any) => {
-            console.log("response:", data)
-            setChatHistory(lastMessage => [...lastMessage, data]);
+            console.log("response:", data);
+            setChatHistory(lastMessages => [...lastMessages, data]);
         })
 
         /*socket.ws.onmessage = msg => {
@@ -47,10 +48,20 @@ const Chat = () => {
         };
     }, [socket])
 
+    /*const deleteMessage = useCallback(() => {
+            setChatHistory(history => history.filter((messages, index) => index > 0));
+    }, [])*/
 
     useEffect(() => {
         connect();
     }, [])
+
+    useEffect(() => {
+        if (chatHistory.length > MAX_CHAT_LENGTH) {
+            setChatHistory(chatHistory.filter((history, index) => index !== 0));
+            console.log("props.chatHistory:", chatHistory);
+        }
+    }, [chatHistory])
 
     const onFormSubmit = (event: React.SyntheticEvent) => {
         event.preventDefault();

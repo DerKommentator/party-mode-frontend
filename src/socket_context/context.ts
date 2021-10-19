@@ -22,6 +22,7 @@ const WsClient = function (this: IWsClient, url: string) {
         };
 
         let rawData = JSON.stringify(event);
+        console.log("SENDING DATA:::", rawData);
         this.ws.send(rawData);
     }
 

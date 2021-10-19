@@ -1,0 +1,25 @@
+.player-wrapper {
+  position: relative;
+  width: auto;
+  height: auto;
+}
+
+.react-player {
+  position: relative;
+  padding-bottom: 45%;
+  /* Player ratio: 80 / (16 / 9) */
+}
+
+.react-player > div {
+  position: absolute;
+}
+
+.chat {
+  position: absolute;
+  float: right;
+  top: 0;
+  right: 0;
+  overflow: hidden;
+}
+
+/*# sourceMappingURL=Room.css.map */
